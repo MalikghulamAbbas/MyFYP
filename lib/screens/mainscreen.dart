@@ -260,11 +260,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
       DateTime eventDate = _parseDate(eventDateString);
 
-      if (eventDate == null) {
-        print('Invalid date format for event: $eventName');
-        continue;
-      }
-
       if (eventDate.isBefore(DateTime.now())) {
         print('Event date has passed for event: $eventName');
         continue;
@@ -427,6 +422,13 @@ class _HomeScreenState extends State<HomeScreen> {
     return adminId;
   }
 
+  Future<String> getAdminToken(String adminId) async {
+    DocumentSnapshot doc =
+        await FirebaseFirestore.instance.collection('users').doc(adminId).get();
+
+    return doc.exists ? (doc['token'] ?? '') : '';
+  }
+
   @override
   Widget build(BuildContext context) {
     if (userdocid.isNotEmpty) {
@@ -463,7 +465,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(height: 10),
                   if (email.isNotEmpty)
                     Text(
-                      email!,
+                      email,
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 16,
@@ -471,7 +473,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   if (username.isNotEmpty)
                     Text(
-                      username!,
+                      username,
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 16,
@@ -761,11 +763,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   String adminId =
                                                       await getAdminId(
                                                           event.id.toString());
+                                                  String token =
+                                                      await getAdminToken(
+                                                          adminId);
+                                                  print(token);
                                                   Navigator.push(
                                                     context,
                                                     MaterialPageRoute(
                                                       builder: (context) =>
                                                           EventDetailsPage(
+                                                        tokenid: token,
                                                         eventId: event.id,
                                                         adminId: adminId,
                                                       ),
@@ -984,11 +991,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   String adminId =
                                                       await getAdminId(
                                                           event.id.toString());
+                                                  String token =
+                                                      await getAdminToken(
+                                                          adminId);
                                                   Navigator.push(
                                                     context,
                                                     MaterialPageRoute(
                                                       builder: (context) =>
                                                           EventDetailsPage(
+                                                        tokenid: token,
                                                         eventId: event.id,
                                                         adminId: adminId,
                                                       ),

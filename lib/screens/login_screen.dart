@@ -181,7 +181,7 @@ class _LoginScreenState extends State<LoginScreen> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('email', email!);
       await prefs.setString('username', username!);
-      await prefs.setString('userdocidforadmin', userdocid!);
+      await prefs.setString('userdocidforadmin', userdocid);
       await prefs.setString('devicdeid', deviceid!);
 
       await prefs.setBool('isAdminLoggedIn', true);
@@ -189,7 +189,7 @@ class _LoginScreenState extends State<LoginScreen> {
       try {
         UserCredential userCredential =
             await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: email!,
+          email: email,
           password: _password, // Provide the user's password here
         );
 
@@ -412,7 +412,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         await prefs.setString(
                                             'username', username!);
                                         await prefs.setString(
-                                            'userid', userId!);
+                                            'userid', userId);
                                         await prefs.setString(
                                             'userdocid', userId2!);
                                         await prefs.setBool(
@@ -422,7 +422,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         await prefs.setBool('isAdmin', false);
                                         await prefs.setBool('isUser', true);
                                         await prefs.setString(
-                                            'devicdid', username!);
+                                            'devicdid', username);
                                         print('object');
                                         print(userId2);
                                         Navigator.push(

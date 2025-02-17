@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:event_manager/screens/chatscreen.dart';
 import 'package:http/http.dart' as http;
 import 'package:custom_rating_bar/custom_rating_bar.dart';
 import 'package:event_manager/components/LoadingWidget.dart';
@@ -20,8 +21,14 @@ import 'package:url_launcher/url_launcher.dart';
 class EventDetailsPage extends StatefulWidget {
   final String eventId;
   final String adminId;
+  final String tokenid;
 
-  EventDetailsPage({required this.eventId, required this.adminId});
+  const EventDetailsPage({
+    Key? key, // Add this
+    required this.eventId,
+    required this.adminId,
+    required this.tokenid,
+  }) : super(key: key); // Ensure super.key is used
 
   @override
   _EventDetailsPageState createState() => _EventDetailsPageState();
@@ -438,7 +445,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
           },
         );
 
-        if (confirmBooking != null && confirmBooking) {
+        if (confirmBooking) {
           await makePayment(advanceIntPayment);
           if (isPaid) {
             for (var dateSlot in datesWithSlots) {
@@ -753,7 +760,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                           Expanded(child: Container()),
                           GestureDetector(
                               onTap: () {
-                                if (latitude != null && longitude != null) {
+                                if (longitude != null) {
                                   _launchMaps(latitude, longitude);
                                 } else {
                                   showDialog(
@@ -877,9 +884,18 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                         ],
                       ),
                       const SizedBox(height: 10),
-                      GestureDetector(
+                      InkWell(
                         onTap: () {
-                          // Navigate to chat screen with event details
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ChatScreen(
+                                eventId: widget.eventId,
+                                adminId: userdocid,
+                                tokenId: widget.tokenid,
+                              ),
+                            ),
+                          );
                         },
                         child: Container(
                           padding: const EdgeInsets.symmetric(

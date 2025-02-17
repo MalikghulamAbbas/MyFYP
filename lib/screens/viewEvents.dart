@@ -31,6 +31,13 @@ class EventList extends StatefulWidget {
 }
 
 class _EventListState extends State<EventList> {
+  Future<String> getAdminToken(String adminId) async {
+    DocumentSnapshot doc =
+        await FirebaseFirestore.instance.collection('users').doc(adminId).get();
+
+    return doc.exists ? (doc['token'] ?? '') : '';
+  }
+
   TextEditingController _searchController = TextEditingController();
 
   @override
@@ -166,13 +173,18 @@ class _EventListState extends State<EventList> {
                             onTap: () async {
                               String adminId =
                                   await getAdminId(event.id.toString());
+
+                              String token = await getAdminToken(
+                                  await getAdminId(event.id.toString()));
                               print('Admin id :$adminId');
                               print('event id :${event.id}');
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => EventDetailsPage(
-                                      eventId: event.id, adminId: adminId),
+                                      tokenid: token,
+                                      eventId: event.id,
+                                      adminId: adminId),
                                 ),
                               );
                             },
@@ -389,16 +401,6 @@ class _EventCardState extends State<EventCard> {
       try {
         // Get the current user's ID
         String userId = getCurrentUserId();
-
-        // Check if the user ID is not null
-        if (userId == null) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('User ID not found!'),
-            ),
-          );
-          return;
-        }
 
         // Create a reference to the current user's document
         DocumentReference userRef =

@@ -163,12 +163,10 @@ class _UpdateScreenState extends State<UpdateScreen> {
       firstDate: DateTime(1900),
       lastDate: DateTime(2100),
     );
-    if (selectedDate != null) {
-      setState(() {
-        _eventDateController.text =
-            "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}";
-      });
-    }
+    setState(() {
+      _eventDateController.text =
+          "${selectedDate!.year}-${selectedDate!.month}-${selectedDate.day}";
+    });
   }
 
   List<File?> selectedImages = [null, null, null];

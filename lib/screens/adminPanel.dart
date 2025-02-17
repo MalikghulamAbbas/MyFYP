@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_manager/components/constants.dart';
 import 'package:event_manager/components/provider.dart';
 import 'package:event_manager/screens/admin.dart';
+import 'package:event_manager/screens/adminchatList.dart';
+import 'package:event_manager/screens/adminchatview.dart';
 import 'package:event_manager/screens/bookedEventsByusers.dart';
 import 'package:event_manager/screens/editDeleteScreen.dart';
 import 'package:event_manager/screens/login_screen.dart';
@@ -69,6 +71,7 @@ class _AdminPanelScreenState extends State<AdminPanelScreen> {
 
   late String userdocid = "";
   late String devicdeid = '';
+  late String adminid = '';
   Future<void> _loadUserData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -114,7 +117,7 @@ class _AdminPanelScreenState extends State<AdminPanelScreen> {
                   const SizedBox(height: 10),
                   if (email.isNotEmpty)
                     Text(
-                      email!,
+                      email,
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 16,
@@ -122,7 +125,7 @@ class _AdminPanelScreenState extends State<AdminPanelScreen> {
                     ),
                   if (username.isNotEmpty)
                     Text(
-                      username!,
+                      username,
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 16,
@@ -268,7 +271,7 @@ class _AdminPanelScreenState extends State<AdminPanelScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => EditDeleteScreen(userEmail: email!),
+                    builder: (context) => EditDeleteScreen(userEmail: email),
                   ),
                 );
 
@@ -286,6 +289,28 @@ class _AdminPanelScreenState extends State<AdminPanelScreen> {
                     builder: (context) => const AdminBookedEventsScreen(),
                   ),
                 );
+
+                // Handle View/Edit Events tap
+              },
+            ),
+            AdminPanelCard(
+              backgroundColor: const Color.fromARGB(255, 192, 122, 250),
+              title: 'Chat Messages',
+              imageUrl: 'assets/images/editdel.png',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => UsersListScreen(),
+                  ),
+                );
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) => AdminChatView(
+                //         userId: userdocid, chatId: 'F7OVMTM8bF10tRuHwizE'),
+                //   ),
+                // );
 
                 // Handle View/Edit Events tap
               },
